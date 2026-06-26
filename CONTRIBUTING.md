@@ -5,8 +5,8 @@ Thanks for contributing to MarkItUp. Here's how to get set up.
 ## Setup
 
 ```bash
-git clone https://github.com/upstridelabs/markitup.git
-cd markitup
+git clone https://github.com/timothyafolami/MarkItUp-py.git
+cd MarkItUp-py
 pip install -e ".[all]"    # editable install with all extras
 ```
 
