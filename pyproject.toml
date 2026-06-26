@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "markitup-py"
-version = "0.3.1"
+version = "0.3.2"
 description = "The reverse of MarkItDown: turn Markdown into clean, themeable DOCX and PDF documents."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -38,9 +38,9 @@ chromium = ["playwright>=1.40"]
 all = ["weasyprint>=60", "pypdf>=4.0", "reportlab>=4.0", "Pillow>=10", "playwright>=1.40"]
 
 [project.urls]
-Homepage = "https://github.com/yourname/markitup"
-Source = "https://github.com/yourname/markitup"
-Issues = "https://github.com/yourname/markitup/issues"
+Homepage = "https://github.com/upstridelabs/markitup"
+Source = "https://github.com/upstridelabs/markitup"
+Issues = "https://github.com/upstridelabs/markitup/issues"
 
 [project.scripts]
 markitup = "markitup.cli:main"
