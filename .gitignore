@@ -1,1 +1,8 @@
 examples
+.DS_Store
+__pycache__/
+*.pyc
+dist/
+*.egg-info/
+*.whl
+*.tar.gz
