@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 (2026-06-26)
+
+- Fixed Chromium PDF engine failing inside Jupyter/IPython notebooks ("Sync API inside the asyncio loop"); Playwright now runs in a worker thread so it works in both notebooks and scripts
+- Chromium engine now sets `emulate_media("print")` (so `@page` CSS applies) and injects a `<base href>` for relative assets, with clear errors when Playwright or the browser is not installed
+- Exposed running headers/footers in the public API: `MarkItUp(header=..., footer=...)` accepting a string, dict, or `Running`
+- Added `MarkItUp(confidential=True)` shortcut (CONFIDENTIAL header + page-number footer)
+- Added CLI flags `--header`, `--footer`, `--confidential`
+- Exported `Running` from the package top level
+
 ## 0.3.2 (2026-06-26)
 
 - Added `academic` theme — Times New Roman body/headings, Courier New mono
