@@ -11,7 +11,7 @@ All visual decisions live in a Theme; the renderers are mechanical.
 import os
 
 from .api import MarkItUp
-from .theme import Theme, Watermark, Banner, Table, make_watermark
+from .theme import Theme, Watermark, Banner, Running, Table, make_watermark
 from .parse import parse
 from .render_docx import render as render_docx
 from .render_html import render_html
@@ -19,9 +19,9 @@ from .render_pdf import render_pdf
 from .stamp import stamp
 from .fonts import list_fonts, available_fonts, is_available, SAFE_FONTS
 
-__version__ = "0.3.2"
+__version__ = "0.4.0"
 __all__ = [
-    "MarkItUp", "Theme", "Watermark", "Banner", "Table",
+    "MarkItUp", "Theme", "Watermark", "Banner", "Running", "Table",
     "parse", "render_docx", "render_html", "render_pdf",
     "stamp", "convert",
     "list_fonts", "available_fonts", "is_available", "SAFE_FONTS",
