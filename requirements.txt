@@ -1,0 +1,10 @@
+markdown-it-py>=3.0
+python-docx>=1.1
+PyYAML>=6.0
+
+# PDF (WeasyPrint engine). Needs system libs: pango, cairo, gdk-pixbuf.
+weasyprint>=60
+# Optional, for image watermark auto-sizing:
+Pillow>=10
+# Optional, for the high-fidelity chromium PDF engine:
+# playwright>=1.40   (then: playwright install chromium)
