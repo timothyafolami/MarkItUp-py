@@ -15,7 +15,7 @@ from __future__ import annotations
 import os
 from typing import Dict, Optional, Union
 
-from .theme import Theme, Banner, Watermark, make_watermark, norm_hex
+from .theme import Theme, Banner, Running, Watermark, make_watermark, norm_hex
 from .parse import parse
 from .render_docx import render as _render_docx
 from .render_html import render_html as _render_html
@@ -48,6 +48,9 @@ class MarkItUp:
         base_docx: Optional[str] = None,
         watermark: Union[Watermark, str, dict, None] = None,
         banner: Union[Banner, str, dict, None] = None,
+        header: Union[Running, str, dict, None] = None,
+        footer: Union[Running, str, dict, None] = None,
+        confidential: bool = False,
         # pdf
         pdf_engine: str = "weasyprint",
     ):
@@ -88,6 +91,17 @@ class MarkItUp:
             th.watermark = make_watermark(watermark)
         if banner is not None:
             th.banner = _coerce_banner(banner)
+        if header is not None:
+            th.header = _coerce_running(header)
+        if footer is not None:
+            th.footer = _coerce_running(footer)
+        # `confidential=True` is a shortcut: a muted CONFIDENTIAL header and a
+        # page-number footer, only filling slots the caller didn't set.
+        if confidential:
+            if th.header is None:
+                th.header = Running(center="CONFIDENTIAL", color="808080", size_pt=8.5)
+            if th.footer is None:
+                th.footer = Running(center="Page {page} of {pages}", color="808080", size_pt=8.5)
 
         self.theme = th
         self.pdf_engine = pdf_engine
@@ -126,6 +140,21 @@ class MarkItUp:
     def stamp(input_path: str, output_path: str, watermark, **kwargs) -> str:
         """Watermark an existing .pdf/.docx. See markitup.stamp for options."""
         return _stamp_mod.stamp(input_path, output_path, watermark, **kwargs)
+
+
+def _coerce_running(value) -> Optional[Running]:
+    if value is None:
+        return None
+    if isinstance(value, Running):
+        r = value
+    elif isinstance(value, str):
+        r = Running(center=value)       # a bare string becomes a centered caption
+    elif isinstance(value, dict):
+        r = Running(**value)
+    else:
+        raise TypeError(f"header/footer must be Running | str | dict | None, got {type(value)!r}")
+    r.color = norm_hex(r.color)
+    return r
 
 
 def _coerce_banner(value) -> Optional[Banner]:
