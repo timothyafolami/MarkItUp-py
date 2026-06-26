@@ -36,15 +36,60 @@ def _weasyprint(html: str, out_path: str, base_url: str):
 
 
 def _chromium(html: str, out_path: str, base_url: str):
-    # Highest-fidelity path. Requires: pip install playwright && playwright install chromium
-    from playwright.sync_api import sync_playwright
+    """Highest-fidelity path via headless Chromium.
 
-    abs_base = os.path.abspath(base_url)
-    with sync_playwright() as pw:
-        browser = pw.chromium.launch()
-        page = browser.new_page()
-        page.set_content(html, wait_until="networkidle")
-        # let relative asset URLs resolve
-        page.evaluate(f"document.head.insertAdjacentHTML('afterbegin', \"<base href='file://{abs_base}/'>\")")
-        page.pdf(path=out_path, prefer_css_page_size=True, print_background=True)
-        browser.close()
+    Requires: pip install playwright && playwright install chromium
+
+    Runs the Playwright *sync* API inside a dedicated worker thread. This is the
+    key to working inside Jupyter/IPython: notebooks already run an asyncio event
+    loop on the main thread, and Playwright's sync API refuses to start there
+    ("Sync API inside the asyncio loop"). A fresh thread has no running loop, so
+    it works in notebooks and plain scripts alike.
+    """
+    abs_base = os.path.abspath(base_url).rstrip("/")
+    base_href = f"file://{abs_base}/"
+    # Inject <base> up front so relative images/watermarks resolve before load.
+    if "<head>" in html:
+        prepared = html.replace("<head>", f"<head><base href=\"{base_href}\">", 1)
+    else:
+        prepared = f'<base href="{base_href}">' + html
+
+    result = {}
+
+    def _work():
+        try:
+            try:
+                from playwright.sync_api import sync_playwright
+            except ImportError as e:
+                raise RuntimeError(
+                    "The 'chromium' PDF engine needs Playwright. Install it with:\n"
+                    "    pip install playwright\n"
+                    "    playwright install chromium"
+                ) from e
+            try:
+                with sync_playwright() as pw:
+                    browser = pw.chromium.launch()
+                    try:
+                        page = browser.new_page()
+                        page.set_content(prepared, wait_until="networkidle")
+                        page.emulate_media(media="print")  # apply @page / print CSS
+                        page.pdf(path=out_path, prefer_css_page_size=True, print_background=True)
+                    finally:
+                        browser.close()
+            except Exception as e:
+                msg = str(e)
+                if "Executable doesn't exist" in msg or "playwright install" in msg:
+                    raise RuntimeError(
+                        "Chromium browser is not installed for Playwright. Run:\n"
+                        "    playwright install chromium"
+                    ) from e
+                raise
+        except BaseException as e:  # capture to re-raise on caller thread
+            result["error"] = e
+
+    import threading
+    t = threading.Thread(target=_work, daemon=True)
+    t.start()
+    t.join()
+    if "error" in result:
+        raise result["error"]
