@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          pip install ".[all]"
+
+      - name: Verify import and basic functionality
+        run: |
+          python -c "
+          from markitup import MarkItUp, Theme, parse, render_docx, render_html, render_pdf
+          from markitup.theme import Running, Watermark, Banner
+          from markitup.fonts import SAFE_FONTS, list_fonts
+
+          # Verify themes load
+          for name in ('report', 'academic'):
+              th = Theme.load(name)
+              assert th.fonts.body, f'{name} theme has no body font'
+              print(f'  theme={name}: {th.fonts.body} / {th.fonts.heading}')
+
+          # Verify font categories
+          for cat in ('serif', 'sans', 'mono', 'academic', 'modern', 'typewriter'):
+              assert cat in SAFE_FONTS, f'Missing font category: {cat}'
+              assert len(SAFE_FONTS[cat]) > 0, f'Empty font category: {cat}'
+
+          # Parse + render a simple markdown doc
+          md = '# Hello\\n\\nThis is a **test** with `code` and a [link](https://example.com).\\n\\n| A | B |\\n|---|---|\\n| 1 | 2 |\\n'
+          doc = parse(md)
+          assert doc.children, 'parse returned empty document'
+          print(f'  parsed {len(doc.children)} blocks')
+
+          print('All checks passed ✅')
+          "
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check markitup/ --ignore=E501
