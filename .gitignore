@@ -1,8 +1,47 @@
-examples
-.DS_Store
+# Byte-compiled
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Build / distribution
 dist/
+build/
 *.egg-info/
-*.whl
-*.tar.gz
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets & environment
+.env
+*.pem
+credentials.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / sample outputs
+samples/output/
+examples/*.docx
+examples/*.pdf
+examples/*.html
+examples/stamped_*
+
+# Playwright
+.playwright/
+
+# MyPy
+.mypy_cache/
+
+# Claude
+.claude/
