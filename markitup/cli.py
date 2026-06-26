@@ -31,6 +31,10 @@ def _add_style_args(p):
     p.add_argument("--accent-color", help="accent color (#RRGGBB)")
     p.add_argument("--base-docx", help="reference .docx whose styles define the design")
     p.add_argument("--banner", help="top-of-document notice, e.g. CONFIDENTIAL")
+    p.add_argument("--header", help="running page header text (centered), use {page}/{pages}")
+    p.add_argument("--footer", help="running page footer text (centered), use {page}/{pages}")
+    p.add_argument("--confidential", action="store_true",
+                   help="add a CONFIDENTIAL header and page-number footer on every page")
     p.add_argument("--watermark", help="text watermark")
     p.add_argument("--watermark-image", help="image watermark (path)")
     p.add_argument("--position", default="center", choices=["center", "top", "bottom"])
@@ -102,6 +106,7 @@ def _cmd_convert(args):
         body_font=args.font, heading_font=args.heading_font, mono_font=args.mono_font,
         text_color=args.text_color, heading_color=args.heading_color, accent_color=args.accent_color,
         base_docx=args.base_docx, watermark=wm, banner=args.banner,
+        header=args.header, footer=args.footer, confidential=args.confidential,
         pdf_engine=args.pdf_engine,
     )
     out = m.convert(args.input, args.output, to=args.to)
