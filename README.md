@@ -4,7 +4,7 @@
 [![PyPI downloads](https://img.shields.io/pypi/dm/markitup-py?color=blue)](https://pypi.org/project/markitup-py/)
 [![Python versions](https://img.shields.io/pypi/pyversions/markitup-py)](https://pypi.org/project/markitup-py/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![CI](https://github.com/upstridelabs/markitup/actions/workflows/ci.yml/badge.svg)](https://github.com/upstridelabs/markitup/actions/workflows/ci.yml)
+[![CI](https://github.com/timothyafolami/MarkItUp-py/actions/workflows/ci.yml/badge.svg)](https://github.com/timothyafolami/MarkItUp-py/actions/workflows/ci.yml)
 
 The reverse of Microsoft's **MarkItDown**: feed it Markdown, get back clean,
 well-designed `.docx`, `.pdf`, and `.html` — with running headers, footers,
