@@ -18,10 +18,26 @@ import subprocess
 from typing import Dict, List
 
 # Families that ship on virtually all Windows/macOS systems (safe for docx).
+# Grouped by category so users can pick by style without guessing what's available.
 SAFE_FONTS: Dict[str, List[str]] = {
-    "serif": ["Times New Roman", "Georgia", "Cambria", "Garamond", "Book Antiqua"],
-    "sans": ["Calibri", "Arial", "Helvetica", "Verdana", "Tahoma", "Trebuchet MS", "Segoe UI"],
-    "mono": ["Consolas", "Courier New", "Lucida Console"],
+    "serif": [
+        "Times New Roman", "Georgia", "Cambria", "Garamond",
+        "Book Antiqua", "Palatino Linotype", "Baskerville",
+        "Cochin", "EB Garamond",
+    ],
+    "sans": [
+        "Calibri", "Arial", "Helvetica", "Verdana", "Tahoma",
+        "Trebuchet MS", "Segoe UI", "Franklin Gothic Medium",
+        "Gill Sans", "Lucida Sans", "Candara", "Corbel",
+    ],
+    "mono": [
+        "Consolas", "Courier New", "Lucida Console",
+        "Menlo", "Monaco", "Source Code Pro",
+    ],
+    # Shorthand aliases for popular academic/journal combinations.
+    "academic": ["Times New Roman", "Computer Modern", "Palatino Linotype", "Garamond"],
+    "modern": ["Calibri", "Helvetica", "Arial", "Segoe UI", "Candara"],
+    "typewriter": ["Courier New", "Consolas", "Lucida Console", "Menlo"],
 }
 
 
