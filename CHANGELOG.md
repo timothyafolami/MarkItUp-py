@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 (2026-07-08)
+
+- Fixed DOCX generation crashing with `ValueError: invalid literal for int() with base 16` when `Running`, `Banner`, or `Watermark` tokens carried `#`-prefixed hex colors (e.g. `Banner(color="#FFFFFF", bg="#B00020")`) — this affected the headers/footers/watermark/banner example in the README. Token colors are now normalized at every DOCX write point (runs, paragraph/table borders, shading, and watermark VML).
+- Fixed 3-digit shorthand hex colors (e.g. `text_color="#222"`, as shown in the docstrings) failing to parse. `norm_hex` now expands `#RGB` to `RRGGBB`, and `hex_to_rgb` accepts shorthand.
+
 ## 0.4.0 (2026-06-26)
 
 - Fixed Chromium PDF engine failing inside Jupyter/IPython notebooks ("Sync API inside the asyncio loop"); Playwright now runs in a worker thread so it works in both notebooks and scripts
