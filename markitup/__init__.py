@@ -19,7 +19,7 @@ from .render_pdf import render_pdf
 from .stamp import stamp
 from .fonts import list_fonts, available_fonts, is_available, SAFE_FONTS
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 __all__ = [
     "MarkItUp", "Theme", "Watermark", "Banner", "Running", "Table",
     "parse", "render_docx", "render_html", "render_pdf",
