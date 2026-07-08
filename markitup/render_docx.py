@@ -17,6 +17,17 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Emu, Inches, Pt, RGBColor
 
 from . import ir
+from .theme import norm_hex
+
+
+def _rgb(color):
+    """RGBColor from a hex string, accepting either '#RRGGBB' or 'RRGGBB'.
+
+    Theme palette colors are already normalized, but user-built tokens
+    (Running/Banner/Watermark) may carry a leading '#'. Normalizing here
+    keeps every call site defensive and idempotent.
+    """
+    return RGBColor.from_string(norm_hex(color))
 
 _ALIGN = {
     "left": WD_ALIGN_PARAGRAPH.LEFT,
@@ -105,7 +116,7 @@ def _emit_runs(p, text, cfg, font):
             continue
         run.font.name = font
         run.font.size = Pt(cfg.size_pt)
-        run.font.color.rgb = RGBColor.from_string(cfg.color)
+        run.font.color.rgb = _rgb(cfg.color)
 
 
 def _field_run(p, code):
@@ -134,7 +145,7 @@ def _para_edge_border(p, edge, color):
     el.set(qn("w:val"), "single")
     el.set(qn("w:sz"), "4")
     el.set(qn("w:space"), "6")
-    el.set(qn("w:color"), color)
+    el.set(qn("w:color"), norm_hex(color))
     pbdr.append(el)
 
 
@@ -145,7 +156,7 @@ def _render_banner(document, theme):
     run = p.add_run(b.text)
     run.font.bold = b.bold
     run.font.size = Pt(b.size_pt or theme.type.base_size * 1.1)
-    run.font.color.rgb = RGBColor.from_string(b.color)
+    run.font.color.rgb = _rgb(b.color)
     if b.bg:
         _set_para_shading(p, b.bg)
         # a little breathing room inside the colored bar
@@ -178,7 +189,7 @@ def _build_styles(document, theme):
     normal = document.styles["Normal"]
     normal.font.name = theme.fonts.body
     normal.font.size = Pt(theme.type.base_size)
-    normal.font.color.rgb = RGBColor.from_string(theme.colors.text)
+    normal.font.color.rgb = _rgb(theme.colors.text)
     pf = normal.paragraph_format
     pf.line_spacing = theme.type.line_height
     pf.space_after = Pt(theme.type.base_size * 0.6)
@@ -191,7 +202,7 @@ def _build_styles(document, theme):
         st.font.size = Pt(size)
         st.font.bold = True
         st.font.italic = False
-        st.font.color.rgb = RGBColor.from_string(theme.colors.heading_color(lvl))
+        st.font.color.rgb = _rgb(theme.colors.heading_color(lvl))
         hpf = st.paragraph_format
         hpf.space_before = Pt(size * 0.6)
         hpf.space_after = Pt(theme.type.base_size * 0.3)
@@ -259,7 +270,7 @@ def _render_code(document, block, theme):
         r = p.add_run(line)
         r.font.name = theme.fonts.mono
         r.font.size = Pt(theme.code_size)
-        r.font.color.rgb = RGBColor.from_string(theme.colors.code_text)
+        r.font.color.rgb = _rgb(theme.colors.code_text)
 
 
 def _render_list(document, lst, theme, level):
@@ -337,11 +348,11 @@ def _apply_run(run, fmt, theme):
     if fmt.get("strike"):
         run.font.strike = True
     if fmt.get("color"):
-        run.font.color.rgb = RGBColor.from_string(fmt["color"])
+        run.font.color.rgb = _rgb(fmt["color"])
     if fmt.get("code"):
         run.font.name = theme.fonts.mono
         run.font.size = Pt(theme.code_size)
-        run.font.color.rgb = RGBColor.from_string(theme.colors.code_text)
+        run.font.color.rgb = _rgb(theme.colors.code_text)
         run._element.get_or_add_rPr().append(_shd(theme.colors.code_bg))
 
 
@@ -371,7 +382,7 @@ def _shd(fill):
     shd = OxmlElement("w:shd")
     shd.set(qn("w:val"), "clear")
     shd.set(qn("w:color"), "auto")
-    shd.set(qn("w:fill"), fill)
+    shd.set(qn("w:fill"), norm_hex(fill))
     return shd
 
 
@@ -394,7 +405,7 @@ def _set_table_borders(table, color, width_pt):
         el.set(qn("w:val"), "single")
         el.set(qn("w:sz"), str(sz))
         el.set(qn("w:space"), "0")
-        el.set(qn("w:color"), color)
+        el.set(qn("w:color"), norm_hex(color))
         borders.append(el)
     tblPr.append(borders)
 
@@ -477,7 +488,7 @@ def _text_watermark_xml(wm, font):
         f'rotation:{wm.rotation};z-index:-1;mso-position-horizontal:center;'
         f'mso-position-horizontal-relative:margin;mso-position-vertical:{vpos};'
         'mso-position-vertical-relative:margin" '
-        f'fillcolor="#{wm.color}" stroked="f">'
+        f'fillcolor="#{norm_hex(wm.color)}" stroked="f">'
         f'<v:fill opacity="{wm.opacity}"/>'
         f'<v:textpath on="t" fitshape="t" string="{text}" '
         f'style="font-family:&quot;{font}&quot;;font-weight:bold"/>'
