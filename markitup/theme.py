@@ -167,13 +167,22 @@ class Theme:
 
 
 def hex_to_rgb(h: str):
-    h = h.lstrip("#")
+    h = norm_hex(h)
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
 
 
 def norm_hex(value: Optional[str]) -> Optional[str]:
-    """Accept '#RRGGBB' or 'RRGGBB'; return 'RRGGBB' (no hash)."""
-    return value.lstrip("#").upper() if value else value
+    """Normalize a hex color to bare 'RRGGBB' (uppercase, no hash).
+
+    Accepts '#RRGGBB'/'RRGGBB' and the 3-digit shorthand '#RGB'/'RGB'
+    (expanded by doubling each nibble, so '#222' -> '222222').
+    """
+    if not value:
+        return value
+    h = value.lstrip("#").upper()
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    return h
 
 
 def make_watermark(value, **overrides) -> Watermark:
