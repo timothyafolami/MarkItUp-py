@@ -1,0 +1,44 @@
+name: report
+
+page:
+  size: A4
+  margin_cm: 2.54
+
+fonts:
+  body: "Georgia"
+  heading: "Calibri"
+  mono: "Consolas"
+
+# Heading sizes are computed from base_size * ratio^(6-level).
+type:
+  base_size: 11.0
+  line_height: 1.45
+  ratio: 1.2
+
+colors:
+  text: "1A1A1A"
+  heading: "0B3D2E"
+  accent: "0B5D3B"
+  rule: "D5D5D5"
+  code_bg: "F6F8FA"
+  code_text: "24292E"
+  link: "0B5D3B"
+
+code_size: 9.5
+
+# Clean, academic-style tables: thin black grid, white header, black text.
+table:
+  border_color: "000000"
+  border_width_pt: 0.5
+  header_bg: "FFFFFF"
+  header_text: "000000"
+  header_bold: true
+  body_text: "000000"
+  font_scale: 0.92   # slightly smaller so wide tables fit cleanly
+
+watermark:
+  enabled: false
+  text: "DRAFT"
+  opacity: 0.10
+  rotation: -45
+  color: "BFBFBF"
