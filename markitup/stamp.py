@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import io
 import os
-from typing import Iterable, Optional, Set
+from typing import Optional, Set
 
 from .theme import Watermark, make_watermark, norm_hex
 
