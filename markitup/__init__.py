@@ -23,7 +23,7 @@ __version__ = "0.4.1"
 __all__ = [
     "MarkItUp", "Theme", "Watermark", "Banner", "Running", "Table",
     "parse", "render_docx", "render_html", "render_pdf",
-    "stamp", "convert",
+    "stamp", "convert", "make_watermark",
     "list_fonts", "available_fonts", "is_available", "SAFE_FONTS",
 ]
 
