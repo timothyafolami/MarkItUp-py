@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markitup-py"
+version = "0.4.1"
+description = "The reverse of MarkItDown: turn Markdown into clean, themeable DOCX and PDF documents."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Timmy" }]
+keywords = ["markdown", "docx", "pdf", "document-generation", "markitdown", "report"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Topic :: Office/Business :: Office Suites",
+]
+
+# Core deps: parsing + docx generation. PDF and existing-file watermarking are
+# optional extras so a docx-only user stays lightweight.
+dependencies = [
+    "markdown-it-py>=3.0",
+    "python-docx>=1.1",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+pdf = ["weasyprint>=60", "pypdf>=4.0", "reportlab>=4.0", "Pillow>=10"]
+chromium = ["playwright>=1.40"]
+all = ["weasyprint>=60", "pypdf>=4.0", "reportlab>=4.0", "Pillow>=10", "playwright>=1.40"]
+
+[project.urls]
+Homepage = "https://github.com/timothyafolami/MarkItUp-py"
+Source = "https://github.com/timothyafolami/MarkItUp-py"
+Issues = "https://github.com/timothyafolami/MarkItUp-py/issues"
+
+[project.scripts]
+markitup = "markitup.cli:main"
+
+[tool.setuptools]
+packages = ["markitup"]
+
+[tool.setuptools.package-data]
+markitup = ["themes/*.yaml", "py.typed"]
