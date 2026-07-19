@@ -11,6 +11,7 @@ import re
 from html import escape
 
 from . import ir
+from .theme import norm_hex
 
 
 def render_html(doc_ir: ir.Document, theme) -> str:
@@ -53,12 +54,12 @@ def _running_rules(theme) -> str:
 def _banner(b) -> str:
     if not b or not b.text:
         return ""
-    bg = f"background:#{b.bg};" if b.bg else ""
+    bg = f"background:#{norm_hex(b.bg)};" if b.bg else ""
     pad = "padding:6px 10px;" if b.bg else ""
     weight = "bold" if b.bold else "normal"
     size = f"{b.size_pt}pt" if b.size_pt else "1.1em"
     return (
-        f"<div class='banner' style='text-align:{b.align};color:#{b.color};{bg}{pad}"
+        f"<div class='banner' style='text-align:{b.align};color:#{norm_hex(b.color)};{bg}{pad}"
         f"font-weight:{weight};font-size:{size};margin:0 0 1em;'>{escape(b.text)}</div>"
     )
 
@@ -82,7 +83,7 @@ def _css(t) -> str:
             if txt:
                 page_boxes += (
                     f"    @{box} {{ content: {_css_content(txt)}; "
-                    f'color: #{t.header.color}; font-size: {t.header.size_pt}pt; '
+                    f'color: #{norm_hex(t.header.color)}; font-size: {t.header.size_pt}pt; '
                     f'font-family: "{font}"; {rule}}}\n'
                 )
     if t.footer:
@@ -95,7 +96,7 @@ def _css(t) -> str:
                     has_page_field = True
                 page_boxes += (
                     f"    @{box} {{ content: {_css_content(txt)}; "
-                    f'color: #{t.footer.color}; font-size: {t.footer.size_pt}pt; '
+                    f'color: #{norm_hex(t.footer.color)}; font-size: {t.footer.size_pt}pt; '
                     f'font-family: "{font}"; {rule}}}\n'
                 )
     if not has_page_field:
@@ -187,7 +188,7 @@ img {{ max-width: 100%; }}
 }}
 .watermark-text {{
   font-family: "{t.fonts.heading}", sans-serif; font-weight: bold;
-  font-size: {t.watermark.width_pt * 0.22:.0f}pt; color: #{t.watermark.color};
+  font-size: {t.watermark.width_pt * 0.22:.0f}pt; color: #{norm_hex(t.watermark.color)};
   white-space: nowrap;
 }}
 .watermark img {{ width: {t.watermark.width_pt}pt; }}
