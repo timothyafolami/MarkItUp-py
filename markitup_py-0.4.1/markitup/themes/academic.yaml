@@ -1,0 +1,45 @@
+name: academic
+
+page:
+  size: A4
+  margin_cm: 2.54
+
+fonts:
+  body: "Times New Roman"
+  heading: "Times New Roman"
+  mono: "Courier New"
+
+# Traditional academic type scale — slightly smaller base, bigger ratio for
+# greater contrast between heading levels (common in journals).
+type:
+  base_size: 11.0
+  line_height: 1.45
+  ratio: 1.25
+
+colors:
+  text: "1A1A1A"
+  heading: "000000"
+  accent: "0B3D2E"
+  rule: "CCCCCC"
+  code_bg: "F5F5F5"
+  code_text: "1A1A1A"
+  link: "0B3D2E"
+
+code_size: 9.5
+
+# Clean tables with thin black grid — standard in academic publishing.
+table:
+  border_color: "000000"
+  border_width_pt: 0.5
+  header_bg: "FFFFFF"
+  header_text: "000000"
+  header_bold: true
+  body_text: "000000"
+  font_scale: 0.92
+
+watermark:
+  enabled: false
+  text: "DRAFT"
+  opacity: 0.10
+  rotation: -45
+  color: "BFBFBF"
