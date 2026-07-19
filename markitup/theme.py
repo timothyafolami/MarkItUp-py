@@ -206,8 +206,7 @@ def make_watermark(value, **overrides) -> Watermark:
     for k, v in overrides.items():
         if v is not None:
             setattr(wm, k, v)
-    if "color" in overrides and overrides["color"]:
-        wm.color = norm_hex(wm.color)
+    wm.color = norm_hex(wm.color)
     if value is not None:
         wm.enabled = True
     return wm
